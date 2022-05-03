@@ -3,8 +3,7 @@ package com.example.breadbomb;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.util.ArrayList;
-import java.util.Locale;
+import java.util.*;
 
 public class breadController {
     @FXML
@@ -20,11 +19,12 @@ public class breadController {
 
     private String prompt;
 
-    private String order;
-
     private String[] dictionary = {"hello"};
 
-    private String[] possibleOrders = {""};
+    private String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
+    "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+
+    private ArrayList<String> typed = new ArrayList<String>();
 
     private String[] possiblePrompts = {"AA", "AB", "AC", "AD", "AF", "AG", "AH", "AI", "AK", "AL", "AM", "AN", "AP",
             "AR", "AS", "AT", "AV", "AW", "BA", "BE", "BI", "BL", "BO", "BU", "CA", "CE", "CH", "CI", "CO", "CU",
@@ -432,20 +432,20 @@ public class breadController {
         promptlbl.setText(prompt);
     }
 
-    public boolean isIn(String s) {
-
-        if (s.contains(prompt)) {
-            return true;
-        }
-        return false;
+    public boolean isInDictionary(String s) {
+        return true;
     }
 
     public void check() {
         String ipt = inputfld.getText();
-        if (ipt.contains(prompt.toLowerCase(Locale.ROOT))) {
+        if (ipt.contains(prompt.toLowerCase(Locale.ROOT)) && isInDictionary(ipt) && !typed.contains(ipt)) {
             score++;
             scorefld.setText(Integer.toString(score));
             newPrompt();
+            typed.add(ipt);
+        } else if (typed.contains(ipt)) {
+            inputfld.setText("");
+            scorefld.setText("Word already used!");
         } else {
             inputfld.setText("");
             scorefld.setText("Doesn't contain prompt!");
