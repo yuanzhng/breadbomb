@@ -13,6 +13,9 @@ public class breadController {
     private Label promptlbl;
 
     @FXML
+    private Label prevlbl;
+
+    @FXML
     private TextField inputfld;
 
     @FXML
@@ -22,8 +25,9 @@ public class breadController {
 
     private String prompt;
 
-    private String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
-    "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+    private String prev;
+
+    private ArrayList<String> alphabet;
 
     private ArrayList<String> typed = new ArrayList<String>();
 
@@ -32,102 +36,11 @@ public class breadController {
             "DA", "DE", "DI", "DO", "EA", "EB", "EC", "ED", "EF", "EG", "EL", "EM",
     "EN", "EG", "EH", "EL", "EM", "EN", "EP", "ER", "ES", "ET", "EW", "FA", "FE", "FI", "FO", "HA", "HE", "HI", "HM", "HT", "HU",
     "IA", "IF", "IH", "IL", "IM", "IN", "IP", "IR", "IS", "IT", "IV", "IV", "KA", "KE", "KI", "KO", "LA", "LE", "LI", "LO", "LU", "MA",
-    "ME", "MI", "MM", "MO", "NA"};
-/*
+    "ME", "MI", "MM", "MO", "NA", "NE", "NI", "NN", "NO", "NS", "OD", "OH", "OO", "OP", "OR", "PA", "PE", "PI", "PO", "PL", "PH", "RA",
+            "RE", "RI", "RO", "RR", "RW", "SA", "SE", "SI", "SO", "ST", "SU", "TA", "TE", "TH", "TS", "TW", "UD", "UM", "UR", "US", "VA",
+            "VE", "VI", "VO", "WA", "WE", "WO", "WT"};
 
-            NE
-
-    NI
-
-    NN
-
-    NO
-
-    NS
-
-    OD
-
-    OH
-
-    OO
-
-    OP
-
-    OR
-
-            PA
-
-    PE
-
-    PI
-
-    PO
-
-    PL
-
-    PH
-
-    RA
-
-            RE
-
-    RI
-
-            RO
-
-    RR
-
-    RW
-
-    SA
-
-            SE
-
-    SI
-
-    SO
-
-    ST
-
-    SU
-
-            TA
-
-    TE
-
-    TH
-
-    TS
-
-    TW
-
-    UD
-
-    UM
-
-    UR
-
-            US
-
-    UT
-
-    VA
-
-    VE
-
-    VI
-
-    VO
-
-    WA
-
-    WE
-
-    WO
-
-    WT
-
-    AAH
+    /*AAH
 
             AAL
 
@@ -426,7 +339,7 @@ public class breadController {
     private ArrayList<String> dictionary = new ArrayList<String>();
     public void initialize() {
         try {
-            File myObj = new File("/en.txt");
+            File myObj = new File(breadApplication.class.getResource("en.txt").getFile());
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -438,12 +351,14 @@ public class breadController {
             e.printStackTrace();
         }
         newPrompt();
+        newOrder();
     }
     public void newPrompt() {
         inputfld.setText("");
         int i = (int) (Math.random() * (possiblePrompts.length - 1));
         this.prompt = possiblePrompts[i];
         promptlbl.setText(prompt);
+
     }
 
     public boolean isInDictionary(String s) {
@@ -457,7 +372,7 @@ public class breadController {
 
     public void check() {
         String ipt = inputfld.getText();
-        if (ipt.contains(prompt.toLowerCase(Locale.ROOT)) && isInDictionary(ipt) && !typed.contains(ipt)) {
+        if (ipt.toLowerCase().contains(prompt.toLowerCase(Locale.ROOT)) && isInDictionary(ipt) && !typed.contains(ipt)) {
             score++;
             scorefld.setText(Integer.toString(score));
             newPrompt();
@@ -465,15 +380,16 @@ public class breadController {
         } else if (typed.contains(ipt)) {
             inputfld.setText("");
             scorefld.setText("Word already used!");
-        } else {
+        } else if (!ipt.toLowerCase().contains(prompt.toLowerCase(Locale.ROOT))){
             inputfld.setText("");
             scorefld.setText("Doesn't contain prompt!");
+        } else {
+            inputfld.setText("");
+            scorefld.setText(ipt.substring(0, 1).toUpperCase() + ipt.substring(1) + " is not a real word.");
         }
     }
 
     public void newOrder() {
 
     }
-
-
 }
