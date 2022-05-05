@@ -2,6 +2,9 @@ package com.example.breadbomb;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import java.util.*;
 
@@ -18,8 +21,6 @@ public class breadController {
     private int score = 0;
 
     private String prompt;
-
-    private String[] dictionary = {"hello"};
 
     private String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
     "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
@@ -422,7 +423,20 @@ public class breadController {
 
     XT */
 
+    private ArrayList<String> dictionary = new ArrayList<String>();
     public void initialize() {
+        try {
+            File myObj = new File("/en.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                dictionary.add(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         newPrompt();
     }
     public void newPrompt() {
@@ -433,7 +447,12 @@ public class breadController {
     }
 
     public boolean isInDictionary(String s) {
-        return true;
+        for (String c : dictionary) {
+            if (s.toLowerCase().equals(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void check() {
